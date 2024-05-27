@@ -1,10 +1,21 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function Sidebar() {
+function Sidebar({ resetChat }) {
+  const navigate = useNavigate();
+
+  const handleNewChat = () => {
+    resetChat();
+  };
+
+  const handleLogout = () => {
+    navigate('/login');
+  };
+
   return (
     <div className="flex flex-col w-[23%] max-md:ml-0 max-md:w-full h-full">
       <div className="flex flex-col grow px-4 pt-8 pb-4 w-full rounded-3xl border-r border-solid bg-indigo-950 border-r-white border-r-opacity-10 max-md:pr-5 max-md:mt-8 overflow-auto">
-        <div className="flex flex-col">
+        <div className="flex flex-col cursor-pointer">
           <div className="flex flex-col pb-4 text-3xl font-semibold leading-6 text-neutral-50">
             <div className="flex flex-col justify-center px-4 py-3 w-full rounded-xl bg-white bg-opacity-10">
               <div className="flex gap-4">
@@ -54,7 +65,10 @@ function Sidebar() {
                 <div>What is machine learning</div>
               </div>
             </div>
-            <div className="flex gap-3 px-4 py-3 mt-4 font-medium bg-pink-800 rounded-xl shadow-sm">
+            <div
+              onClick={handleNewChat}
+              className="flex gap-3 px-4 py-3 mt-4 font-medium bg-pink-800 rounded-xl shadow-sm cursor-pointer"
+            >
               <img
                 loading="lazy"
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/680ccf037ae3324b37240a189f6910948d4861387c221cff6415294bfe79e299?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&"
@@ -96,9 +110,12 @@ function Sidebar() {
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/79c1654f44627c6b0db56679b08e79147fd6de35a07bf126250abf1a88f2b548?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&"
                     className="shrink-0 my-auto w-5 aspect-square"
                   />
-                  <div>Uptades & FAQ</div>
+                  <div>Updates & FAQ</div>
                 </div>
-                <div className="flex gap-3 px-4 py-3 mt-1 text-rose-500 rounded-xl shadow-sm">
+                <div
+                  onClick={handleLogout}
+                  className="flex gap-3 px-4 py-3 mt-1 text-rose-500 rounded-xl shadow-sm cursor-pointer"
+                >
                   <img
                     loading="lazy"
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/4c84f30c054d44366b00df6b2494c7ffafbbd15234fc91f67f38efca58c3cf02?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&"
