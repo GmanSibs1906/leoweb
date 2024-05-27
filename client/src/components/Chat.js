@@ -99,17 +99,26 @@ function Chat() {
                   ))}
                 </div>
                 <form className="flex w-full items-center justify-center" onSubmit={(e) => { e.preventDefault(); sendMessage(); }}>
-                  <input
-                    type="text"
-                    value={userInput}
-                    onChange={(e) => setUserInput(e.target.value)}
-                    className="flex-1 mr-2 p-4 text-sm border rounded-2xl"
-                    placeholder="Ask me anything"
-                  />
-                  <button type="submit" className="bg-[#100547] text-white px-4 py-2 rounded-2xl">
-                    Send
-                  </button>
-                </form>
+  <input
+    type="text"
+    value={userInput}
+    onChange={(e) => setUserInput(e.target.value)}
+    className="flex-1 mr-2 p-4 text-sm border rounded-2xl"
+    placeholder="Ask me anything"
+  />
+  <button type="button" className="mr-2 px-3 bg-[#100547] rounded-full">
+    <i className="fa fa-file"></i>
+  </button>
+  <button type="button" className="mr-2 px-3 bg-[#100547] rounded-full">
+    <i className="fa fa-image"></i>
+  </button>
+  <button type="button" className="mr-2 px-3 bg-[#100547] rounded-full">
+    <i className="fa fa-microphone"></i>
+  </button>
+  <button type="submit" className="bg-[#100547] text-white px-4 py-2 rounded-2xl">
+    Send
+  </button>
+</form>
                 {isLoading && (
                   <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                     <img src={loader} width="150px" alt="Loading..." />
