@@ -1,13 +1,14 @@
+// Login.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { logo } from "../images";
 
 const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Add your login logic here
-    // On successful login, navigate to the chat page
+   
     navigate('/chat');
   };
 
@@ -15,9 +16,10 @@ const Login = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <div className="flex items-center mb-4">
-          <img src="/path-to-your-logo.png" alt="Logo" className="h-10 mr-2" />
-          <h1 className="text-2xl font-bold">Login</h1>
+          <img src={logo} alt="Logo" className="h-10 mr-2" />
+          
         </div>
+        <h1 className="text-2xl mb-3 font-bold" style={{ color: '#100547' }}>Login to your account</h1>
         <p className="text-sm text-gray-600 mb-4">
           Don't have an account yet? <a href="/signup" className="text-blue-500">Sign up</a>
         </p>
@@ -49,7 +51,8 @@ const Login = () => {
           </div>
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+            className="text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+            style={{ backgroundColor: '#100547' }}
           >
             Login
           </button>
