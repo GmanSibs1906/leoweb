@@ -2,10 +2,10 @@ import React from 'react';
 
 function Sidebar() {
   return (
-    <div className="flex flex-col w-[23%] max-md:ml-0 max-md:w-full">
-      <div className="flex flex-col grow px-4 pt-8 pb-4 w-full rounded-3xl border-r border-solid bg-indigo-950 border-r-white border-r-opacity-10 max-md:pr-5 max-md:mt-8">
+    <div className="flex flex-col w-[23%] max-md:ml-0 max-md:w-full h-full">
+      <div className="flex flex-col grow px-4 pt-8 pb-4 w-full rounded-3xl border-r border-solid bg-indigo-950 border-r-white border-r-opacity-10 max-md:pr-5 max-md:mt-8 overflow-auto">
         <div className="flex flex-col">
-          <div className="flex flex-col pb-20 text-3xl font-semibold leading-6 text-neutral-50">
+          <div className="flex flex-col pb-4 text-3xl font-semibold leading-6 text-neutral-50">
             <div className="flex flex-col justify-center px-4 py-3 w-full rounded-xl bg-white bg-opacity-10">
               <div className="flex gap-4">
                 <img
@@ -19,7 +19,7 @@ function Sidebar() {
               </div>
             </div>
           </div>
-          <div className="flex z-10 flex-col -mt-10 text-base leading-6 text-neutral-200">
+          <div className="flex z-10 flex-col -mt-4 text-base leading-6 text-neutral-200">
             <div className="flex flex-col">
               <div className="flex gap-3 px-4 py-3 rounded-xl shadow-sm">
                 <img
@@ -29,7 +29,7 @@ function Sidebar() {
                 />
                 <div>How to write an impacting ...</div>
               </div>
-              <div className="flex gap-3 px-4 py-3 mt-1.5 rounded-xl shadow-sm">
+              <div className="flex gap-3 px-4 py-3 mt-1 rounded-xl shadow-sm">
                 <img
                   loading="lazy"
                   src="https://cdn.builder.io/api/v1/image/assets/TEMP/8747002c886561fe6eeeb0e87f1a4f3f53d518003eee30c1b9fbbbe657d30016?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&"
@@ -37,7 +37,7 @@ function Sidebar() {
                 />
                 <div>Web accessibility</div>
               </div>
-              <div className="flex gap-3 px-4 py-3 mt-1.5 rounded-xl shadow-sm">
+              <div className="flex gap-3 px-4 py-3 mt-1 rounded-xl shadow-sm">
                 <img
                   loading="lazy"
                   src="https://cdn.builder.io/api/v1/image/assets/TEMP/aa20cd752807bdd975666312096c93ffb101d4c3783f54f1b4cd832035df4a1a?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&"
@@ -45,7 +45,7 @@ function Sidebar() {
                 />
                 <div>Design inspiration</div>
               </div>
-              <div className="flex gap-3 px-4 py-3 mt-1.5 rounded-xl shadow-sm">
+              <div className="flex gap-3 px-4 py-3 mt-1 rounded-xl shadow-sm">
                 <img
                   loading="lazy"
                   src="https://cdn.builder.io/api/v1/image/assets/TEMP/e8efc6241736f05d408d82e03fcbf86ae39daecda1f1136ad15b63663f28fde6?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&"
@@ -63,7 +63,7 @@ function Sidebar() {
               <div>Start a new chat</div>
             </div>
           </div>
-          <div className="flex flex-col justify-center mt-72 text-base leading-6 text-neutral-200 max-md:mt-10">
+          <div className="flex flex-col justify-center mt-10 text-base leading-6 text-neutral-200 max-md:mt-4">
             <div className="flex flex-col justify-center">
               <div className="flex flex-col pt-1.5">
                 <div className="flex gap-3 px-4 py-3 rounded-xl shadow-sm">
@@ -74,7 +74,7 @@ function Sidebar() {
                   />
                   <div>Clear all conversations</div>
                 </div>
-                <div className="flex gap-3 px-4 py-3 mt-1.5 rounded-xl shadow-sm">
+                <div className="flex gap-3 px-4 py-3 mt-1 rounded-xl shadow-sm">
                   <img
                     loading="lazy"
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/52b5be7910d5bbaf066b7fe2921b6d14bf03f04e61f3a0a2d6d5e7e8d899ed92?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&"
@@ -82,7 +82,7 @@ function Sidebar() {
                   />
                   <div>Switch Light Mode</div>
                 </div>
-                <div className="flex gap-3 px-4 py-3 mt-1.5 rounded-xl shadow-sm">
+                <div className="flex gap-3 px-4 py-3 mt-1 rounded-xl shadow-sm">
                   <img
                     loading="lazy"
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/492ff50bc1a3acfb621a7b9b9d72d373d161c07ba723418cf9949ef20a3e38e7?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&"
@@ -90,7 +90,7 @@ function Sidebar() {
                   />
                   <div>Upgrade to Pro</div>
                 </div>
-                <div className="flex gap-3 px-4 py-3 mt-1.5 rounded-xl shadow-sm">
+                <div className="flex gap-3 px-4 py-3 mt-1 rounded-xl shadow-sm">
                   <img
                     loading="lazy"
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/79c1654f44627c6b0db56679b08e79147fd6de35a07bf126250abf1a88f2b548?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&"
@@ -98,7 +98,7 @@ function Sidebar() {
                   />
                   <div>Uptades & FAQ</div>
                 </div>
-                <div className="flex gap-3 px-4 py-3 mt-1.5 text-rose-500 rounded-xl shadow-sm">
+                <div className="flex gap-3 px-4 py-3 mt-1 text-rose-500 rounded-xl shadow-sm">
                   <img
                     loading="lazy"
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/4c84f30c054d44366b00df6b2494c7ffafbbd15234fc91f67f38efca58c3cf02?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&"
