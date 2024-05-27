@@ -59,11 +59,11 @@ const Login = () => {
         </form>
         <p className="text-sm text-gray-600 mt-4 mb-2 text-center">Or login with</p>
         <div className="flex justify-center space-x-4">
-          <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-            Google
+          <button className="bg-gray-200 hover:bg-red-700 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+          <i class="fa-brands fa-google mx-2"></i>Google
           </button>
-          <button className="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-            Facebook
+          <button className="bg-gray-200 hover:bg-blue-800 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+          <i class="fa-brands fa-facebook mx-2"></i>Facebook
           </button>
         </div>
       </div>
