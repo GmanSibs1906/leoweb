@@ -45,9 +45,9 @@ function Chat() {
       const botMessage = data.response;
 
       setChatHistory(prevHistory => [
-        ...prevHistory,
         { type: 'user', text: userMessage },
         { type: 'bot', text: botMessage },
+        ...prevHistory
       ]);
 
       // Call text-to-speech function
@@ -102,13 +102,9 @@ function Chat() {
     }
   }, [chatHistory]);
 
-  const resetChat = () => {
-    setChatHistory([]);
-  };
-
   return (
     <div className="flex h-screen gap-5 max-md:flex-col max-md:gap-0">
-      <Sidebar resetChat={resetChat} />
+      <Sidebar />
       <div className="flex flex-col ml-5 w-[77%] max-md:ml-0 max-md:w-full items-center justify-center">
         <div className="flex flex-col mt-10 max-md:mt-4 max-md:max-w-full items-center">
           <div className="flex flex-col justify-center font-medium max-md:max-w-full items-center">
@@ -120,7 +116,7 @@ function Chat() {
                 <div className="flex flex-col max-w-full w-full items-center">
                   <div className="flex flex-col justify-center rounded-xl max-md:max-w-full items-center">
                     <div id="chat-history" className="h-96 overflow-y-auto mb-4 w-full">
-                      {defaultOptions.map((option, index) => (
+                      {chatHistory.length === 0 && defaultOptions.map((option, index) => (
                         <div
                           key={index}
                           onClick={() => sendMessage(option.title)}
@@ -134,7 +130,7 @@ function Chat() {
                       {chatHistory.map((message, index) => (
                         <div
                           key={index}
-                          className={`p-3 mb-2 self-center rounded-lg ${message.type === 'user' ? 'bg-gray-200 text-right' : 'bg-green-100 text-left'}`}
+                          className={`p-4 mb-2 self-center text-indigo-950 rounded-xl ${message.type === 'user' ? 'bg-transparent border border-gray-200 text-sm text-right' : 'bg-transparent border border-indigo-950 text-left text-indigo-950 py-4 my-6'}`}
                           style={{ width: '795px' }}
                         >
                           {message.text}
@@ -146,7 +142,7 @@ function Chat() {
                         type="text"
                         value={userInput}
                         onChange={(e) => setUserInput(e.target.value)}
-                        className="flex-1 mr-2 p-4 text-sm border rounded-2xl"
+                        className="flex-1 mr-2 p-4 text-sm text-indigo-950 border rounded-2xl "
                         placeholder="Ask me anything"
                       />
                       <button type="button" className="mr-2 px-3 bg-[#100547] rounded-full">
