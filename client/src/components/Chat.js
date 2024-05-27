@@ -7,10 +7,22 @@ function Chat() {
   const [isLoading, setIsLoading] = useState(false);
 
   const defaultOptions = [
-    'Brainstorm names',
-    'Suggest some codenames',
-    'Write an SQL query',
-    'Explain why popcorn pops'
+    { 
+      title: 'Brainstorm names', 
+      description: 'For my fantasy football team with my frog theme' 
+    },
+    { 
+      title: 'Suggest some codenames', 
+      description: 'For a project introducing flexible work arrangements' 
+    },
+    { 
+      title: 'Write an SQL query', 
+      description: 'That adds a \'status\' column to an \'order\' table' 
+    },
+    { 
+      title: 'Explain why popcorn pops', 
+      description: 'To a kid who loves watching it in the microwave' 
+    }
   ];
 
   const sendMessage = async (message) => {
@@ -58,25 +70,26 @@ function Chat() {
         <div className="bg-white rounded-lg shadow-md p-6 w-96 relative">
           <div className='text-center mb-4'>How can I help you today?</div>
           <div id="chat-history" className="h-96 overflow-y-auto mb-4">
-            {defaultOptions.map((option, index) => (
-              <div
-                key={index}
-                onClick={() => sendMessage(option)}
-                className="cursor-pointer p-4 mb-4 rounded-2xl border border-gray-300 text-gray-500 hover:bg-gray-50"
-                style={{ opacity: 0.7 }}
-              >
-                {option}
-              </div>
-            ))}
-            {chatHistory.map((message, index) => (
-              <div
-                key={index}
-                className={`p-3 mb-2 rounded-lg ${message.type === 'user' ? 'bg-gray-200 self-end text-right' : 'bg-green-100 self-start text-left'}`}
-              >
-                {message.text}
-              </div>
-            ))}
-          </div>
+  {defaultOptions.map((option, index) => (
+    <div
+      key={index}
+      onClick={() => sendMessage(option.title)}
+      className="cursor-pointer p-4 mb-4 rounded-3xl border border-gray-300 text-gray-500 text-sm hover:bg-gray-50"
+      style={{ opacity: 0.7 }}
+    >
+      <div className="text-sm font-bold">{option.title}</div>
+      <div className="text-xs">{option.description}</div>
+    </div>
+  ))}
+  {chatHistory.map((message, index) => (
+    <div
+      key={index}
+      className={`p-3 mb-2 rounded-lg ${message.type === 'user' ? 'bg-gray-200 self-end text-right' : 'bg-green-100 self-start text-left'}`}
+    >
+      {message.text}
+    </div>
+        ))}
+         </div>
           <form className="flex" onSubmit={(e) => { e.preventDefault(); sendMessage(); }}>
             <input
               type="text"
