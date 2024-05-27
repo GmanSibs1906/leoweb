@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { loader, logo } from "./images";
+import { loader, logo } from "../images";
 
 function Chat() {
   const [chatHistory, setChatHistory] = useState([]);
