@@ -74,51 +74,53 @@ function Chat() {
             How can I help you today?
           </div>
           <div className="flex flex-wrap justify-center content-start items-center px-8 mt-8 mb-16 text-2xl leading-7 text-white max-md:px-4 max-md:my-8 max-md:max-w-full">
-            <div className="flex flex-col max-w-full w-full">
-              <div className="flex flex-col justify-center rounded-xl max-md:max-w-full">
-                <div className="flex flex-col justify-center max-md:max-w-full">
-                  <div id="chat-history" className="h-96 overflow-y-auto mb-4">
-                    {defaultOptions.map((option, index) => (
-                      <div
-                        key={index}
-                        onClick={() => sendMessage(option.title)}
-                        className="cursor-pointer p-4 mb-4 rounded-3xl border border-gray-300 text-gray-500 text-sm hover:bg-gray-50"
-                        style={{ opacity: 0.7 }}
-                      >
-                        <div className="text-sm font-bold">{option.title}</div>
-                        <div className="text-xs">{option.description}</div>
-                      </div>
-                    ))}
-                    {chatHistory.map((message, index) => (
-                      <div
-                        key={index}
-                        className={`p-3 mb-2 rounded-lg ${message.type === 'user' ? 'bg-gray-200 self-end text-right' : 'bg-green-100 self-start text-left'}`}
-                      >
-                        {message.text}
-                      </div>
-                    ))}
-                  </div>
-                  <form className="flex" onSubmit={(e) => { e.preventDefault(); sendMessage(); }}>
-                    <input
-                      type="text"
-                      value={userInput}
-                      onChange={(e) => setUserInput(e.target.value)}
-                      className="flex-1 mr-2 p-2 border rounded-md"
-                      placeholder="Ask me anything"
-                    />
-                    <button type="submit" className="bg-[#100547] text-white px-4 py-2 rounded-md">
-                      Send
-                    </button>
-                  </form>
-                  {isLoading && (
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                      <img src={loader} width="150px" alt="Loading..." />
-                    </div>
-                  )}
-                </div>
-              </div>
+  <div className="flex flex-col max-w-full w-full">
+    <div className="flex flex-col justify-center rounded-xl max-md:max-w-full">
+      <div className="flex flex-col justify-center max-md:max-w-full">
+        <div id="chat-history" className="h-96 overflow-y-auto mb-4">
+          {defaultOptions.map((option, index) => (
+            <div
+              key={index}
+              onClick={() => sendMessage(option.title)}
+              className="cursor-pointer p-4 mb-4 self-center rounded-3xl border border-gray-300 text-gray-500 text-sm hover:bg-gray-50"
+              style={{ opacity: 0.7, width: '795px' }}
+            >
+              <div className="text-sm font-bold">{option.title}</div>
+              <div className="text-xs">{option.description}</div>
             </div>
+          ))}
+          {chatHistory.map((message, index) => (
+            <div
+              key={index}
+              className={`p-3 mb-2 self-center rounded-lg ${message.type === 'user' ? 'bg-gray-200 text-right' : 'bg-green-100 text-left'}`}
+              style={{ width: '795px' }}
+            >
+              {message.text}
+            </div>
+          ))}
+        </div>
+        <form className="flex" onSubmit={(e) => { e.preventDefault(); sendMessage(); }}>
+          <input
+            type="text"
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+            className="flex-1 mr-2 p-4 text-sm border rounded-2xl"
+            placeholder="Ask me anything"
+          />
+          <button type="submit" className="bg-[#100547] text-white px-4 py-2 rounded-2xl">
+            Send
+          </button>
+        </form>
+        {isLoading && (
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <img src={loader} width="150px" alt="Loading..." />
           </div>
+        )}
+      </div>
+    </div>
+  </div>
+</div>
+
         </div>
       </div>
     </div>
