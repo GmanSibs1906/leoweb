@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { logo } from "../images";
+import { logo2 } from "../images";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ const Login = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-indigo-950">
       <div className="flex flex-col justify-center items-center w-full max-w-lg bg-indigo-950 border-opacity-10 rounded-[40px] p-12">
-        <img src={logo} alt="Logo" className="h-16 mb-6" />
+        <img src={logo2} alt="Logo" className="h-16 mb-6" />
         <div className="flex flex-col items-center text-center text-neutral-50">
           <div className="text-4xl font-semibold tracking-wider mb-4">Login to your account</div>
           <div className="text-base font-bold text-pink-700">

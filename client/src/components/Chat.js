@@ -63,8 +63,8 @@ function Chat() {
   const speakText = (text) => {
     const speech = new SpeechSynthesisUtterance(text);
     speech.lang = 'en-US';
-    speech.pitch = 1;
-    speech.rate = 1;
+    speech.pitch = 1.5;
+    speech.rate = 1.2;
     speech.volume = 1;
     window.speechSynthesis.speak(speech);
   };
@@ -103,9 +103,9 @@ function Chat() {
   }, [chatHistory]);
 
   return (
-    <div className="flex h-screen gap-5 max-md:flex-col max-md:gap-0">
+    <div className="flex h-screen gap-5 max-md:flex-col max-md:gap-0 bg-cover bg-center">
       <Sidebar />
-      <div className="flex flex-col ml-5 w-[77%] max-md:ml-0 max-md:w-full items-center justify-center">
+      <div className="flex flex-col ml-5 w-[77%] max-md:ml-0 max-md:w-full items-center justify-center bg-custom-pattern bg-opacity-5">
         <div className="flex flex-col mt-10 max-md:mt-4 max-md:max-w-full items-center">
           <div className="flex flex-col justify-center font-medium max-md:max-w-full items-center">
             <div className="flex flex-col pb-10 max-md:max-w-full items-center">
@@ -137,27 +137,31 @@ function Chat() {
                         </div>
                       ))}
                     </div>
+                    <div className='bg-indigo-950 w-full rounded-xl'>
                     <form className="flex w-full items-center justify-center" onSubmit={(e) => { e.preventDefault(); sendMessage(); }}>
+                      
                       <input
                         type="text"
                         value={userInput}
                         onChange={(e) => setUserInput(e.target.value)}
-                        className="flex-1 mr-2 p-4 text-sm text-indigo-950 border rounded-2xl "
+                        className="flex-1 mr-2 p-4 text-sm text-indigo-950 rounded-2xl bg-indigo-950"
                         placeholder="Ask me anything"
                       />
-                      <button type="button" className="mr-2 px-3 bg-[#100547] rounded-full">
+                      <button type="button" className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full">
                         <i className="fa fa-file text-sm"></i>
                       </button>
-                      <button type="button" className="mr-2 px-3 bg-[#100547] rounded-full">
+                      <button type="button" className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full">
                         <i className="fa fa-image text-sm"></i>
                       </button>
-                      <button type="button" className="mr-2 px-3 bg-[#100547] rounded-full" onClick={handleSpeechRecognition}>
+                      <button type="button" className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full" onClick={handleSpeechRecognition}>
                         <i className="fa fa-microphone text-sm"></i>
                       </button>
                       <button type="submit" className="bg-[#100547] text-white px-4 py-2 rounded-2xl">
                         Send
                       </button>
+
                     </form>
+                    </div>
                     {isLoading && (
                       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                         <img src={loader} width="150px" alt="Loading..." />
