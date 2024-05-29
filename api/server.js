@@ -2,26 +2,34 @@ const express = require('express');
 const cors = require('cors');
 const OpenAI = require('openai');
 const path = require('path');
+const { initializeApp, cert } = require('firebase-admin/app');
+const { getStorage } = require('firebase-admin/storage');
+const multer = require('multer');
+const admin = require('firebase-admin');
+const axios = require('axios');
+const serviceAccount = require('./leodata.json');
+const app = express();
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  storageBucket: "leodatabase-80687.appspot.com"
+});
 
 require('dotenv').config();
 
-const app = express();
 const port = process.env.PORT || 5000;
+
+const storage = getStorage();
+const bucket = storage.bucket();
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public'))); // Serve React build files
+app.use(express.static(path.join(__dirname, 'public')));
 
-// packages for image recognition
-const fs = require('fs');
-const multer = require('multer');
-
-// Initialize OpenAI with the API key from the environment variable
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Chat Session Management (In-memory for this example)
 const chatSessions = {};
 
 async function runChat(sessionId, userInput) {
@@ -54,8 +62,6 @@ async function runChat(sessionId, userInput) {
   return assistantMessage.content;
 }
 
-////////// chat gpt text api //////////
-
 app.post('/api/chat', async (req, res) => {
   const { sessionId, userInput } = req.body;
   console.log(`Received request: sessionId=${sessionId}, userInput=${userInput}`);
@@ -69,39 +75,54 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-
-////////// vision api //////////
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "public")
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname)
-  }
-})
-
 const upload = multer({
-  storage: storage
-}).single("file")
+  storage: multer.memoryStorage()
+}).single("file");
 
-let filePath
-
-app.post("/upload", (req, res) => {
-  upload(req, res, (err) => {
-    if (err) {
-      return res.status(500).json(err)
+app.post("/upload", upload, async (req, res) => {
+  try {
+    const file = req.file;
+    if (!file) {
+      return res.status(400).send('No file uploaded.');
     }
-    filePath = req.file.path
-    console.log(filePath)
-  })
-})
+
+    const filename = Date.now() + '-' + file.originalname;
+    const fileRef = bucket.file(filename);
+
+    const stream = fileRef.createWriteStream({
+      metadata: {
+        contentType: file.mimetype,
+      },
+    });
+
+    stream.on('error', (error) => {
+      console.error("Error uploading image: ", error);
+      res.status(500).send("Error uploading image to Firebase");
+    });
+
+    stream.on('finish', async () => {
+      await fileRef.makePublic();
+      const url = `https://storage.googleapis.com/${bucket.name}/${fileRef.name}`;
+      console.log(`Image uploaded to: ${url}`);
+      res.json({ url });
+    });
+
+    stream.end(file.buffer);
+  } catch (error) {
+    console.error("Error uploading image: ", error);
+    res.status(500).send("Error uploading image to Firebase");
+  }
+});
 
 app.post("/vision", async (req, res) => {
   try {
-    const imageAsBase64 = fs.readFileSync(filePath, "base64")
-    const message = req.body.message;
-    const response = await openai.chat.completions.create({
+    const { message, imageUrl } = req.body;
+
+    // Download image from URL and convert it to base64
+    const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+    const imageAsBase64 = Buffer.from(response.data, 'binary').toString('base64');
+
+    const aiResponse = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
         {
@@ -118,12 +139,14 @@ app.post("/vision", async (req, res) => {
         },
       ],
     });
-    console.log(response.choices[0]);
-    res.send(response.choices[0])
+
+    console.log(aiResponse.choices[0]);
+    res.send(aiResponse.choices[0]);
   } catch (error) {
-    console.log(error)
+    console.error("Error handling vision request:", error);
+    res.status(500).json({ error: error.message });
   }
-})
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
