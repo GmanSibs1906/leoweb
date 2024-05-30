@@ -10,22 +10,21 @@ export const doSignInWithEmailAndPassword = (email, password) => {
   return signInWithEmailAndPassword(auth, email, password);
 };
 
-export const doSignInWithGoogle = async (errorCallback) => {
+export const doSignInWithGoogle = async (setAuthError) => {
   const provider = new GoogleAuthProvider();
   try {
-    const result = await signInWithPopup(auth, provider);
-    return result;
+      const result = await signInWithPopup(auth, provider);
+      return result;
   } catch (error) {
-    console.error("Error during Google sign-in: ", error);
-    if (error.code === 'auth/account-exists-with-different-credential') {
-      const email = error.customData.email;
-      const signInMethods = await fetchSignInMethodsForEmail(auth, email);
-      error.customData.signInMethods = signInMethods;
-    }
-    if (errorCallback) {
-      errorCallback(error);
-    }
-    throw error;
+      console.error("Error during Google sign-in: ", error);
+      if (error.code === 'auth/account-exists-with-different-credential') {
+          const email = error.customData.email;
+          const signInMethods = await fetchSignInMethodsForEmail(auth, email);
+          error.customData.signInMethods = signInMethods;
+          setAuthError("This email is already in use. Sign in with GitHub or use a different email.");
+      } else {
+          setAuthError(error.message);
+      }
   }
 };
 
@@ -33,24 +32,22 @@ export const doSignOut = () => {
   return auth.signOut();
 };
 
-export const doSignInWithGithub = async (errorCallback) => {
+export const doSignInWithGithub = async (setAuthError) => {
   const provider = new GithubAuthProvider();
   
   try {
-    const result = await signInWithPopup(auth, provider);
-    return result;
+      const result = await signInWithPopup(auth, provider);
+      return result;
   } catch (error) {
-    console.error("Error during GitHub sign-in: ", error);
-    if (error.code === 'auth/account-exists-with-different-credential') {
-      const email = error.customData.email;
-      const signInMethods = await fetchSignInMethodsForEmail(auth, email);
-      error.customData.signInMethods = signInMethods;
-
-    }
-    if (errorCallback) {
-      errorCallback(error);
-    }
-    // throw error;
+      console.error("Error during GitHub sign-in: ", error);
+      if (error.code === 'auth/account-exists-with-different-credential') {
+          const email = error.customData.email;
+          const signInMethods = await fetchSignInMethodsForEmail(auth, email);
+          error.customData.signInMethods = signInMethods;
+          setAuthError("This email is already in use. Sign in with Google or use a different email.");
+      } else {
+          setAuthError(error.message);
+      }
   }
 };
 
