@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import { logo } from "../images";
+import { logo2 } from "../images";
 
 export default function Welcome() {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ export default function Welcome() {
   return (
     <div className="bg-[#8B084E] flex justify-center items-center min-h-screen px-16 py-20 border border-solid border-white border-opacity-10 rounded-[40px] max-md:px-5">
       <div className="flex flex-col items-center pb-8 max-w-full w-[564px]">
-        <img src={logo} alt="Logo" className="h-16 mb-6" />
+        <img src={logo2} alt="Logo" className="h-16 mb-6" />
         <div className="flex flex-col px-7 pb-6 leading-[150%] text-indigo-950 max-md:px-5 max-md:max-w-full items-center">
           <div className="flex gap-4 text-5xl font-semibold tracking-wider max-md:flex-wrap max-md:text-4xl items-center justify-center">
             <div className="flex-auto my-auto max-md:text-4xl text-center text-white">Welcome to</div>

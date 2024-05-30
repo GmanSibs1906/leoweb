@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { loader } from "../images";
-import Sidebar from './Sidebar';
+import Sidebar from '../components/Sidebar';
 
 function Chat() {
   const [chatHistory, setChatHistory] = useState([]);
   const [userInput, setUserInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isMicrophoneActive, setIsMicrophoneActive] = useState(false);
   const recognitionRef = useRef(null);
 
   const defaultOptions = [
@@ -26,6 +27,35 @@ function Chat() {
       description: 'To a kid who loves watching it in the microwave' 
     }
   ];
+
+  
+  useEffect(() => {
+    if (!('webkitSpeechRecognition' in window)) {
+      alert('Your browser does not support speech recognition. Please try Google Chrome.');
+      return;
+    }
+
+    const recognition = new window.webkitSpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setUserInput(transcript);
+      sendMessage(transcript);
+    };
+
+    recognition.onerror = (event) => {
+      console.error('Speech recognition error', event.error);
+    };
+
+    recognition.onend = () => {
+      setIsMicrophoneActive(false);
+    };
+
+    recognitionRef.current = recognition;
+  }, []);
 
   const sendMessage = async (message) => {
     const userMessage = message || userInput;
@@ -70,28 +100,15 @@ function Chat() {
   };
 
   const handleSpeechRecognition = () => {
-    if (!('webkitSpeechRecognition' in window)) {
-      alert('Your browser does not support speech recognition. Please try Google Chrome.');
-      return;
+    const recognition = recognitionRef.current;
+
+    if (isMicrophoneActive) {
+      recognition.stop();
+      setIsMicrophoneActive(false);
+    } else {
+      recognition.start();
+      setIsMicrophoneActive(true);
     }
-
-    const recognition = new window.webkitSpeechRecognition();
-    recognition.lang = 'en-US';
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      setUserInput(transcript);
-      sendMessage(transcript);
-    };
-
-    recognition.onerror = (event) => {
-      console.error('Speech recognition error', event.error);
-    };
-
-    recognitionRef.current = recognition;
-    recognition.start();
   };
 
   useEffect(() => {
@@ -105,7 +122,7 @@ function Chat() {
   return (
     <div className="flex h-screen gap-5 max-md:flex-col max-md:gap-0 bg-cover bg-center">
       <Sidebar />
-      <div className="flex flex-col ml-5 w-[77%] max-md:ml-0 max-md:w-full items-center justify-center bg-custom-pattern bg-opacity-5">
+      <div className="flex flex-col ml-5 w-[77%] max-md:ml-0 max-md:w-full items-center justify-center bg-custom-pattern bg-opacity-[20%]">
         <div className="flex flex-col mt-10 max-md:mt-4 max-md:max-w-full items-center">
           <div className="flex flex-col justify-center font-medium max-md:max-w-full items-center">
             <div className="flex flex-col pb-10 max-md:max-w-full items-center">
@@ -120,7 +137,7 @@ function Chat() {
                         <div
                           key={index}
                           onClick={() => sendMessage(option.title)}
-                          className="cursor-pointer p-4 mb-4 self-center rounded-3xl border border-gray-300 text-gray-500 text-sm hover:bg-gray-50"
+                          className="cursor-pointer p-4 mb-4 self-center rounded-3xl border border-gray-300 text-gray-500 text-sm hover:bg-white"
                           style={{ opacity: 0.7, width: '795px' }}
                         >
                           <div className="text-sm font-bold">{option.title}</div>
@@ -144,7 +161,7 @@ function Chat() {
                         type="text"
                         value={userInput}
                         onChange={(e) => setUserInput(e.target.value)}
-                        className="flex-1 mr-2 p-4 text-sm text-indigo-950 rounded-2xl bg-indigo-950"
+                        className="flex-1 mr-2 p-4 text-sm text-gray-200 rounded-2xl bg-indigo-950"
                         placeholder="Ask me anything"
                       />
                       <button type="button" className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full">
@@ -153,8 +170,15 @@ function Chat() {
                       <button type="button" className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full">
                         <i className="fa fa-image text-sm"></i>
                       </button>
-                      <button type="button" className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full" onClick={handleSpeechRecognition}>
+                      <button 
+                        type="button" 
+                        className={`mr-2 px-3 text-gray-300 ${isMicrophoneActive ? 'bg-green-700 text-white' : 'bg-transparent'} rounded-full`}
+                        onClick={handleSpeechRecognition}
+                      >
                         <i className="fa fa-microphone text-sm"></i>
+                      </button>
+                      <button className='mr-2 px-3 text-gray-300'>
+                      <i class="fa-regular fa-circle-stop text-sm"></i>
                       </button>
                       <button type="submit" className="bg-[#100547] text-white px-4 py-2 rounded-2xl">
                         Send
