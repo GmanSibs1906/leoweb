@@ -20,9 +20,8 @@ export const doSignInWithGoogle = async () => {
 export const doSignInWithGithub = async () => {
     const provider = new GithubAuthProvider();
     const result = await signInWithPopup(auth, provider);
-
     return result;
-}
+};
 
 export const doSignOut = () => {
     return auth.signOut();
