@@ -8,6 +8,7 @@ function Chat() {
   const [isLoading, setIsLoading] = useState(false);
   const [isMicrophoneActive, setIsMicrophoneActive] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [volume, setVolume] = useState(1);
   const recognitionRef = useRef(null);
   const utteranceRef = useRef(null);
 
@@ -97,7 +98,7 @@ function Chat() {
     speech.lang = 'en-US';
     speech.pitch = 1.5;
     speech.rate = 1.2;
-    speech.volume = 1;
+    speech.volume = volume; 
     window.speechSynthesis.speak(speech);
   };
 
@@ -131,6 +132,15 @@ function Chat() {
     setIsMicrophoneActive(false);
     setIsPaused(false);
   };
+
+  const handleIncreaseVolume = () => {
+    setVolume(prevVolume => Math.min(prevVolume + 0.1, 1)); // Increase volume by 0.1, max is 1
+  };
+  
+  const handleDecreaseVolume = () => {
+    setVolume(prevVolume => Math.max(prevVolume - 0.1, 0)); // Decrease volume by 0.1, min is 0
+  };
+  
 
   useEffect(() => {
     // Scroll to the bottom whenever chatHistory updates
@@ -220,6 +230,20 @@ function Chat() {
                       >
                       <i class="fa-regular fa-circle-stop text-sm"></i>
                       </button>
+                      <button 
+                      type="button" 
+                      className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full" 
+                      onClick={handleDecreaseVolume}
+                      >
+                     <i className="fa fa-volume-down text-sm"></i>
+                     </button>
+                     <button 
+  type="button" 
+  className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full" 
+  onClick={handleIncreaseVolume}
+>
+  <i className="fa fa-volume-up text-sm"></i>
+</button>
                       <button type="submit" className="bg-[#100547] text-white px-4 py-2 rounded-2xl">
                         Send
                       </button>
