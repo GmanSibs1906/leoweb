@@ -1,8 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { loader } from "../images";
 import Sidebar from './Sidebar';
+import { useAuth } from '../contexts/authContext';
 
 function Chat() {
+  const { userLoggedIn } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!userLoggedIn) {
+      navigate('/login');
+    }
+  }, [userLoggedIn, navigate]);
+
   const [chatHistory, setChatHistory] = useState([]);
   const [userInput, setUserInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
