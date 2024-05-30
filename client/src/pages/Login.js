@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
-import { logo2 } from "../images";
+import { logo2, github } from "../images";
 import { doSignInWithEmailAndPassword, doSignInWithGoogle, doSignInWithGithub } from '../firebase/auth';
 import { useAuth } from '../contexts/authContext'; 
 import Modal from '../components/Modal'; 
@@ -118,7 +118,7 @@ const Login = () => {
                     </button>
                     <button className="flex-1 flex justify-center items-center text-neutral-50 px-4 py-3 bg-gray-500 bg-opacity-30 rounded-3xl focus:outline-none" onClick={onGithubSignIn}>
                         <img
-                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/2496f6becb45f85255fb30430205f9ff6ab25ab500bde4a4a107dff255ce0dd5?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&"
+                            src={github}
                             alt="Github"
                             className="w-6 mr-2"
                         />
