@@ -7,7 +7,9 @@ function Chat() {
   const [userInput, setUserInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isMicrophoneActive, setIsMicrophoneActive] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const recognitionRef = useRef(null);
+  const utteranceRef = useRef(null);
 
   const defaultOptions = [
     { 
@@ -111,12 +113,23 @@ function Chat() {
     }
   };
 
+  const handlePause = () => {
+    window.speechSynthesis.pause();
+    setIsPaused(true);
+  };
+
+  const handleResume = () => {
+    window.speechSynthesis.resume();
+    setIsPaused(false);
+  };
+
   const handleStop = () => {
     window.speechSynthesis.cancel();
     if (recognitionRef.current) {
       recognitionRef.current.stop();
     }
     setIsMicrophoneActive(false);
+    setIsPaused(false);
   };
 
   useEffect(() => {
@@ -185,6 +198,21 @@ function Chat() {
                       >
                         <i className="fa fa-microphone text-sm"></i>
                       </button>
+                      <button 
+                      type='button'
+                      className='mr-2 px-3 text-gray-300 bg-[#100547] rounded-full'
+                      onClick={handleResume}
+                      >
+                        <i class="fa-regular fa-circle-play text-sm"></i>
+                      </button>
+                      <button 
+                        type="button" 
+                        className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full" 
+                        onClick={handlePause}
+                      >
+                        <i className="fa-regular fa-circle-pause text-sm"></i>
+                      </button>
+
                       <button 
                       className='mr-2 px-3 text-gray-300 bg-[#100547] rounded-full'
                       type="button" 
