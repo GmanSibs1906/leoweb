@@ -7,12 +7,24 @@ import { useAuth } from '../contexts/authContext';
 function Chat() {
   const { userLoggedIn, loading } = useAuth();
   const navigate = useNavigate();
+  const [chatHistory, setChatHistory] = useState([]);
+  const [userInput, setUserInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const recognitionRef = useRef(null);
 
   useEffect(() => {
     if (!loading && !userLoggedIn) {
       navigate('/login');
     }
   }, [userLoggedIn, loading, navigate]);
+
+  useEffect(() => {
+    // Scroll to the bottom whenever chatHistory updates
+    const chatContainer = document.getElementById('chat-history');
+    if (chatContainer) {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+  }, [chatHistory]);
 
   if (loading) {
     return (
@@ -26,10 +38,7 @@ function Chat() {
     return null; // Optionally, you can return a redirect component here.
   }
 
-  const [chatHistory, setChatHistory] = useState([]);
-  const [userInput, setUserInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const recognitionRef = useRef(null);
+ 
 
   const defaultOptions = [
     { 
@@ -117,13 +126,7 @@ function Chat() {
     recognition.start();
   };
 
-  useEffect(() => {
-    // Scroll to the bottom whenever chatHistory updates
-    const chatContainer = document.getElementById('chat-history');
-    if (chatContainer) {
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-  }, [chatHistory]);
+  
 
   return (
     <div className="flex h-screen gap-5 max-md:flex-col max-md:gap-0 bg-cover bg-center">
