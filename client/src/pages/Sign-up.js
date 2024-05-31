@@ -48,19 +48,19 @@ export default function SignUp() {
               <input
                 type="text"
                 placeholder="Full Name"
-                className="justify-center px-4 py-5 text-lg leading-5 rounded-2xl border border-pink-700 border-solid max-md:pr-5 max-md:max-w-full"
+                className="justify-center px-4 py-5 text-indigo-950 text-lg leading-5 rounded-2xl border border-pink-700 border-solid max-md:pr-5 max-md:max-w-full"
                 required
               />
               <input
                 type="email"
                 placeholder="Email"
-                className="justify-center px-4 py-5 mt-6 whitespace-nowrap rounded-2xl border border-pink-700 border-solid max-md:pr-5 max-md:max-w-full"
+                className="justify-center px-4 py-5 text-indigo-950 mt-6 whitespace-nowrap rounded-2xl border border-pink-700 border-solid max-md:pr-5 max-md:max-w-full"
                 required
               />
               <input
                 type="email"
                 placeholder="Confirm Email"
-                className="justify-center px-4 py-5 mt-6 rounded-2xl border border-pink-700 border-solid max-md:pr-5 max-md:max-w-full"
+                className="justify-center px-4 py-5 mt-6 text-indigo-950 rounded-2xl border border-pink-700 border-solid max-md:pr-5 max-md:max-w-full"
                 required
               />
               <div className="flex gap-2 justify-center px-4 py-3.5 mt-6 whitespace-nowrap rounded-2xl border border-pink-800 border-solid max-md:flex-wrap">

@@ -31,8 +31,16 @@ function Chat() {
     }
   ];
 
-  
+  const listAvailableVoices = () => {
+    const voices = window.speechSynthesis.getVoices();
+    voices.forEach((voice, index) => {
+      console.log(`${index}: ${voice.name} (${voice.lang})`);
+    });
+  };
+
   useEffect(() => {
+    listAvailableVoices();
+
     if (!('webkitSpeechRecognition' in window)) {
       alert('Your browser does not support speech recognition. Please try Google Chrome.');
       return;
@@ -58,6 +66,11 @@ function Chat() {
     };
 
     recognitionRef.current = recognition;
+
+    window.speechSynthesis.onvoiceschanged = () => {
+      listAvailableVoices();
+    };
+
   }, []);
 
   const sendMessage = async (message) => {
@@ -99,7 +112,15 @@ function Chat() {
     speech.pitch = 1.5;
     speech.rate = 1.2;
     speech.volume = volume; 
+
+    const voices = window.speechSynthesis.getVoices();
+    const selectedVoice = voices.find(voice => voice.name === 'Google UK English Male'); // Change the name to the desired voice
+    if (selectedVoice) {
+      speech.voice = selectedVoice;
+    }
+
     window.speechSynthesis.speak(speech);
+
   };
 
   const handleSpeechRecognition = () => {
