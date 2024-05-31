@@ -1,46 +1,45 @@
 import React, { useState, useEffect } from "react";
 import { loader, logo } from "./images";
 
-function Upload() {
+function Chat() {
   const [chatHistory, setChatHistory] = useState([]);
   const [userInput, setUserInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  
 
   // for image recognition
   const [imageRequest, setImageRequest] = useState(false);
-  const [image, setImage] = useState();
-  const [imageResponse, setImageResponse] = useState();
-  const [imageError, setImageError] = useState();
+  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
+  const [imageResponse, setImageResponse] = useState("");
+  const [imageError, setImageError] = useState("");
 
   // upload the pic
   const uploadImage = async (e) => {
     setImageResponse("");
+    const file = e.target.files[0];
     const formData = new FormData();
-    formData.append("file", e.target.files[0]);
-    // console.log(e.target.files[0]);
-    setImage(e.target.files[0]);
-    e.target.value = null;
+    formData.append("file", file);
+    setImage(file);
+    setImageUrl(URL.createObjectURL(file)); // Create a local URL for the image
 
-    // send image to back end
     try {
       const options = {
         method: "POST",
         body: formData,
       };
       const response = await fetch("http://localhost:5000/upload", options);
-      const data = response.json();
+      const data = await response.json();
+      setImageUrl(data.url); // Save the image URL
       console.log(data);
     } catch (error) {
-      console.error("problem uploading images: " + error.message);
+      console.error("Problem uploading images: " + error.message);
     }
   };
 
-  // analyze uploaded pic
   const analyzeImage = async () => {
     setImageResponse("");
     if (!image) {
-      setImageError("Please upload image first!!!");
+      setImageError("Please upload an image first!");
       return;
     }
     try {
@@ -48,6 +47,7 @@ function Upload() {
         method: "POST",
         body: JSON.stringify({
           message: userInput,
+          imageUrl: imageUrl // Send the image URL along with the user's text input
         }),
         headers: {
           "Content-Type": "application/json",
@@ -56,14 +56,13 @@ function Upload() {
 
       const response = await fetch("http://localhost:5000/vision", options);
       const data = await response.json();
-      // console.log(data)
       setImageResponse(data.message.content);
 
       setChatHistory((prevHistory) => [
-        { type: "image", image }, 
+        { type: "image", imageUrl },
         { type: "user", text: userInput },
         { type: "imageResponse", text: data.message.content },
-        ...prevHistory, 
+        ...prevHistory,
       ]);
 
     } catch (error) {
@@ -102,7 +101,6 @@ function Upload() {
   };
 
   useEffect(() => {
-    // scrolling 2 the bottom whenever chatHistory updatez
     const chatContainer = document.getElementById("chat-history");
     if (chatContainer) {
       chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -120,36 +118,28 @@ function Upload() {
         <div className="bg-white rounded-lg shadow-md p-6 w-96">
           <h1 className="text-center text-2xl mb-4">Leo 2.0 Chatbot 🤖</h1>
           <div id="chat-history" className="h-96 overflow-y-auto mb-4 flex flex-col">
-      { imageRequest && (
-        <div className="w-full my-[15px]">
-          {image && (
-            <img
-              className="w-full object-contain"
-              src={URL.createObjectURL(image)}
-              alt=""
-            />
-          )}
-        </div>
-      )}
-
-      {chatHistory.map((message, index) => (
-        <React.Fragment key={index}>
-          {message.type === "user" && (
-            <div className="text-left p-3 mb-2 rounded-lg bg-gray-200 mr-2">
-              {message.text}
-            </div>
-          )}
-          {message.type === "imageResponse" && (
-            <div className="text-left p-3 mb-2 rounded-lg bg-green-100 ml-2">
-              {message.text}
-            </div>
-          )}
-        </React.Fragment>
-      ))}
-    </div>
+            {chatHistory.map((message, index) => (
+              <React.Fragment key={index}>
+                {message.type === "user" && (
+                  <div className="text-left p-3 mb-2 rounded-lg bg-gray-200 mr-2">
+                    {message.text}
+                  </div>
+                )}
+                {message.type === "imageResponse" && (
+                  <div className="text-left p-3 mb-2 rounded-lg bg-green-100 ml-2">
+                    {message.text}
+                  </div>
+                )}
+                {message.type === "image" && (
+                  <div className="text-left p-3 mb-2 rounded-lg bg-gray-200 mr-2">
+                    <img src={message.imageUrl} alt="uploaded" className="w-full object-contain" />
+                  </div>
+                )}
+              </React.Fragment>
+            ))}
+          </div>
 
           {imageRequest ? (
-            // upload image
             <form
               className="flex flex-col"
               onSubmit={(e) => {
@@ -159,9 +149,7 @@ function Upload() {
             >
               <div className=" w-full flex justify-center my-[10px] cursor-pointer ">
                 <div className="bg-[#100547] text-white px-4 py-1 rounded-md">
-                  <label className="" htmlFor="files">
-                    Upload
-                  </label>
+                  <label htmlFor="files">Upload</label>
                   <input
                     type="file"
                     onChange={uploadImage}
@@ -171,6 +159,11 @@ function Upload() {
                   />
                 </div>
               </div>
+              {image && (
+                <div className="w-full my-4">
+                  <img src={imageUrl} alt="preview" className="w-full object-contain" />
+                </div>
+              )}
               <div className=" flex ">
                 <input
                   type="text"
@@ -188,7 +181,6 @@ function Upload() {
               </div>
             </form>
           ) : (
-            // no image
             <form
               className="flex flex-col"
               onSubmit={(e) => {
@@ -233,4 +225,4 @@ function Upload() {
   );
 }
 
-export default Upload;
+export default Chat;
