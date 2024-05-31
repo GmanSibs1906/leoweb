@@ -1,13 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { doCreateUserWithEmailAndPassword } from '../firebase/auth';
 
 export default function SignUp() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password1, setPassword1] = useState("");
+  const [password2, setPassword2] = useState("");
+  const [username, setUsername] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
-    // Handle sign-up logic here
-    navigate('/login');
+
+    if (password1 !== password2) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    try {
+      await doCreateUserWithEmailAndPassword(email, password1);
+      navigate('/login');
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
@@ -18,7 +34,7 @@ export default function SignUp() {
             <div className="flex gap-4 self-start text-3xl font-semibold leading-6 text-neutral-50">
               <img
                 loading="lazy"
-                srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/cb6332f575121e953596ef88905e5cbc83fee640ad4d9c44fb529e9301e22acb?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/cb6332f575121e953596ef88905e5cbc83fee640ad4d9c44fb529e9301e22acb?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/cb6332f575121e953596ef88905e5cbc83fee640ad4d9c44fb529e9301e22acb?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/cb6332f575121e953596ef88905e5cbc83fee640ad4d9c44fb529e9301e22acb?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/cb6332f575121e953596ef88905e5cbc83fee640ad4d9c44fb529e9301e22acb?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/cb6332f575121e953596ef88905e5cbc83fee640ad4d9c44fb529e9301e22acb?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/cb6332f575121e953596ef88905e5cbc83fee640ad4d9c44fb529e9301e22acb?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/cb6332f575121e953596ef88905e5cbc83fee640ad4d9c44fb529e9301e22acb?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&"
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/cb6332f575121e953596ef88905e5cbc83fee640ad4d9c44fb529e9301e22acb?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&"
                 className="shrink-0 w-14 aspect-[1.41]"
                 alt="Logo"
               />
@@ -44,24 +60,21 @@ export default function SignUp() {
             </div>
           </div>
           <form className="flex flex-col mt-10 max-md:max-w-full" onSubmit={handleSignUp}>
+            {error && <div className="text-red-500 mb-4">{error}</div>}
             <div className="flex flex-col text-base leading-5 text-neutral-50 max-md:max-w-full">
               <input
                 type="text"
                 placeholder="Full Name"
                 className="justify-center px-4 py-5 text-indigo-950 text-lg leading-5 rounded-2xl border border-pink-700 border-solid max-md:pr-5 max-md:max-w-full"
                 required
+                onChange={(e) => setUsername(e.target.value)}
               />
               <input
                 type="email"
                 placeholder="Email"
                 className="justify-center px-4 py-5 text-indigo-950 mt-6 whitespace-nowrap rounded-2xl border border-pink-700 border-solid max-md:pr-5 max-md:max-w-full"
                 required
-              />
-              <input
-                type="email"
-                placeholder="Confirm Email"
-                className="justify-center px-4 py-5 mt-6 text-indigo-950 rounded-2xl border border-pink-700 border-solid max-md:pr-5 max-md:max-w-full"
-                required
+                onChange={(e) => setEmail(e.target.value)}
               />
               <div className="flex gap-2 justify-center px-4 py-3.5 mt-6 whitespace-nowrap rounded-2xl border border-pink-800 border-solid max-md:flex-wrap">
                 <input
@@ -69,6 +82,22 @@ export default function SignUp() {
                   placeholder="Password"
                   className="flex-1 my-auto max-md:max-w-full bg-transparent border-none focus:outline-none text-neutral-50"
                   required
+                  onChange={(e) => setPassword1(e.target.value)}
+                />
+                <img
+                  loading="lazy"
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/3764e0037156513098f716d12d66560e191c604ce0a3ed96ecdb2e8c20588f52?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&"
+                  className="shrink-0 w-7 aspect-square"
+                  alt="Password Icon"
+                />
+              </div>
+              <div className="flex gap-2 justify-center px-4 py-3.5 mt-6 whitespace-nowrap rounded-2xl border border-pink-800 border-solid max-md:flex-wrap">
+                <input
+                  type="password"
+                  placeholder="Confirm Password"
+                  className="flex-1 my-auto max-md:max-w-full bg-transparent border-none focus:outline-none text-neutral-50"
+                  required
+                  onChange={(e) => setPassword2(e.target.value)}
                 />
                 <img
                   loading="lazy"
