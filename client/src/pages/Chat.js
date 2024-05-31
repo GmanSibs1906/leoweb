@@ -9,8 +9,71 @@ function Chat() {
   const [isMicrophoneActive, setIsMicrophoneActive] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [volume, setVolume] = useState(1);
+  const [imageRequest, setImageRequest] = useState(true);
   const recognitionRef = useRef(null);
   const utteranceRef = useRef(null);
+  const [image, setImage] = useState();
+  const [imageUrl, setImageUrl] = useState("");
+  const [imageResponse, setImageResponse] = useState();
+  const [imageError, setImageError] = useState();
+
+  // upload the pic
+  const uploadImage = async (e) => {
+    setImageResponse("");
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    setImage(file);
+    setImageUrl(URL.createObjectURL(file)); // Create a local URL for the image
+
+    try {
+      const options = {
+        method: "POST",
+        body: formData,
+      };
+      const response = await fetch("http://localhost:5000/upload", options);
+      const data = await response.json();
+      setImageUrl(data.url); // Save the image URL
+      console.log(data);
+    } catch (error) {
+      console.error("Problem uploading images: " + error.message);
+    }
+  };
+
+  const analyzeImage = async () => {
+    setImageResponse("");
+    if (!image) {
+      setImageError("Please upload an image first!");
+      return;
+    }
+    try {
+      const options = {
+        method: "POST",
+        body: JSON.stringify({
+          message: userInput,
+          imageUrl: imageUrl // Send the image URL along with the user's text input
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const response = await fetch("http://localhost:5000/vision", options);
+      const data = await response.json();
+      setImageResponse(data.message.content);
+
+      setChatHistory((prevHistory) => [
+        { type: "image", imageUrl },
+        { type: "user", text: userInput },
+        { type: "imageResponse", text: data.message.content },
+        ...prevHistory,
+      ]);
+
+    } catch (error) {
+      console.error(error.message);
+      setImageError("Something broke, please try again");
+    }
+  };
 
   const defaultOptions = [
     { 
@@ -174,7 +237,7 @@ function Chat() {
   return (
     <div className="flex h-screen gap-5 max-md:flex-col max-md:gap-0 bg-cover bg-center">
       <Sidebar />
-      <div className="flex flex-col ml-5 w-[77%] max-md:ml-0 max-md:w-full items-center justify-center bg-custom-pattern bg-opacity-[20%]">
+      <div className="flex flex-col ml-5 w-[77%] max-md:ml-0 max-md:w-full items-center justify-center bg-custom-pattern bg-opacity-[30%]">
         <div className="flex flex-col mt-10 max-md:mt-4 max-md:max-w-full items-center">
           <div className="flex flex-col justify-center font-medium max-md:max-w-full items-center">
             <div className="flex flex-col pb-10 max-md:max-w-full items-center">
@@ -184,7 +247,32 @@ function Chat() {
               <div className="flex flex-wrap justify-center content-start items-center px-8 mt-8 mb-16 text-2xl leading-7 text-white max-md:px-4 max-md:my-8 max-md:max-w-full">
                 <div className="flex flex-col max-w-full w-full items-center">
                   <div className="flex flex-col justify-center rounded-xl max-md:max-w-full items-center">
-                    <div id="chat-history" className="h-96 overflow-y-auto mb-4 w-full">
+                    {
+                      imageRequest?(
+                      <div>
+                        <div className='box-border justify-center item-center h-32 w-full m-12 p-40 border-4 bg-white'>
+                        <div className="bg-[#100547] text-white px-4 py-1 rounded-md">
+                  <label className="" htmlFor="files">
+                    Upload
+                  </label>
+                  <input
+                    type="file"
+                    onChange={uploadImage}
+                    id="files"
+                    accept="image/*"
+                    hidden
+                  />
+                </div>
+                        </div>
+                        <button type="submit" className="bg-[#100547] text-white px-4 py-2 my-5 rounded-2xl"
+                         onClick={()=> setImageRequest(false)}>
+                        Chat to Leo
+                        </button>
+                      </div>
+
+                      )
+                      :(
+                        <div id="chat-history" className="h-96 overflow-y-auto mb-4 w-full">
                       {chatHistory.length === 0 && defaultOptions.map((option, index) => (
                         <div
                           key={index}
@@ -192,7 +280,7 @@ function Chat() {
                           className="cursor-pointer p-4 mb-4 self-center rounded-3xl border border-gray-300 text-gray-500 text-sm hover:bg-white"
                           style={{ opacity: 0.7, width: '795px' }}
                         >
-                          <div className="text-sm font-bold">{option.title}</div>
+                          <div className="text-xl font-bold">{option.title}</div>
                           <div className="text-xs">{option.description}</div>
                         </div>
                       ))}
@@ -206,8 +294,44 @@ function Chat() {
                         </div>
                       ))}
                     </div>
-                    <div className='bg-indigo-950 w-full rounded-xl'>
-                    <form className="flex w-full items-center justify-center" onSubmit={(e) => { e.preventDefault(); sendMessage(); }}>
+                      )
+                    }
+                    
+                     {
+                  
+                      imageRequest?(
+                        <div className='bg-indigo-950 w-full rounded-xl'>
+                        <form className="flex w-full items-center justify-center" onSubmit={(e) => { e.preventDefault(); analyzeImage(); }}>
+                      
+                      <input
+                        type="text"
+                        value={userInput}
+                        onChange={(e) => setUserInput(e.target.value)}
+                        className="flex-1 mr-2 p-4 text-sm text-gray-200 rounded-2xl bg-indigo-950"
+                        placeholder="Write your question about the image"
+                      />
+                      
+                      <button 
+                        type="button" 
+                        className={`mr-2 px-3 text-gray-300 bg-[#100547] rounded-full ${isMicrophoneActive ? 'bg-green-700 text-white' : 'bg-transparent'} rounded-full`}
+                        onClick={handleSpeechRecognition}
+                      >
+                        <i className="fa fa-microphone text-sm"></i>
+                      </button>
+                      
+                      <button type="submit" className="bg-[#100547] text-white px-4 py-2 rounded-2xl">
+                        Ask 
+                      </button>
+
+                     </form>
+                     </div>
+                      )
+                      :(
+                        <div className='bg-indigo-950 w-full rounded-xl'>
+                        <form className="flex w-full items-center justify-center" onSubmit={(e) => {
+                e.preventDefault();
+                
+              }}>
                       
                       <input
                         type="text"
@@ -219,7 +343,8 @@ function Chat() {
                       <button type="button" className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full">
                         <i className="fa fa-file text-sm"></i>
                       </button>
-                      <button type="button" className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full">
+                      <button type="button" className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full"
+                      onClick={()=> setImageRequest(true)}>
                         <i className="fa fa-image text-sm"></i>
                       </button>
                       <button 
@@ -259,18 +384,22 @@ function Chat() {
                      <i className="fa fa-volume-down text-sm"></i>
                      </button>
                      <button 
-  type="button" 
-  className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full" 
-  onClick={handleIncreaseVolume}
->
-  <i className="fa fa-volume-up text-sm"></i>
-</button>
+                     type="button" 
+                     className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full" 
+                     onClick={handleIncreaseVolume}
+                     >
+                     <i className="fa fa-volume-up text-sm"></i>
+                     </button>
                       <button type="submit" className="bg-[#100547] text-white px-4 py-2 rounded-2xl">
                         Send
                       </button>
 
                     </form>
                     </div>
+                      )
+                    }
+                    
+                    
                     {isLoading && (
                       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                         <img src={loader} width="150px" alt="Loading..." />
