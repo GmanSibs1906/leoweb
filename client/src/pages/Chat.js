@@ -53,7 +53,7 @@ function Chat() {
         method: "POST",
         body: JSON.stringify({
           message: userInput,
-          imageUrl: imageUrl // Send the image URL along with the user's text input
+          imageUrl: imageUrl, // Send the image URL along with the user's text input
         }),
         headers: {
           "Content-Type": "application/json",
@@ -70,7 +70,6 @@ function Chat() {
         { type: "imageResponse", text: data.message.content },
         ...prevHistory,
       ]);
-
     } catch (error) {
       console.error(error.message);
       setImageError("Something broke, please try again");
@@ -160,7 +159,7 @@ function Chat() {
       const data = await response.json();
       const botMessage = data.response;
 
-      console.log(botMessage)
+      console.log(botMessage);
 
       setChatHistory((prevHistory) => [
         { type: "user", text: userMessage },
@@ -231,7 +230,7 @@ function Chat() {
   };
 
   const handleDecreaseVolume = () => {
-    setVolume((prevVolume) => Math.max(prevVolume - 0.1, 0)); 
+    setVolume((prevVolume) => Math.max(prevVolume - 0.1, 0));
   };
 
   useEffect(() => {
@@ -256,7 +255,6 @@ function Chat() {
               <div className="flex flex-wrap justify-center content-start items-center px-8 mt-8 mb-16 text-2xl leading-7 text-white max-md:px-4 max-md:my-8 max-md:max-w-full">
                 <div className="flex flex-col max-w-full w-full items-center">
                   <div className="flex flex-col justify-center rounded-xl max-md:max-w-full items-center">
-<<<<<<< HEAD
                     <div
                       id="chat-history"
                       className="h-96 overflow-y-auto mb-4 w-full"
@@ -275,239 +273,206 @@ function Chat() {
                             <div className="text-xs">{option.description}</div>
                           </div>
                         ))}
-=======
-                    {
-                      imageRequest?(
-                      <div>
-                        <div className='box-border justify-center item-center h-32 w-full m-12 p-40 border-4 bg-white'>
-                        <div className="bg-[#100547] text-white px-4 py-1 rounded-md">
-                  <label className="" htmlFor="files">
-                    Upload
-                  </label>
-                  <input
-                    type="file"
-                    onChange={uploadImage}
-                    id="files"
-                    accept="image/*"
-                    hidden
-                  />
-                </div>
+                      ;
+                      {imageRequest ? (
+                        <div>
+                          <div className="box-border justify-center item-center h-32 w-full m-12 p-40 border-4 bg-white">
+                            <div className="bg-[#100547] text-white px-4 py-1 rounded-md">
+                              <label className="" htmlFor="files">
+                                Upload
+                              </label>
+                              <input
+                                type="file"
+                                onChange={uploadImage}
+                                id="files"
+                                accept="image/*"
+                                hidden
+                              />
+                            </div>
+                          </div>
+                          <button
+                            type="submit"
+                            className="bg-[#100547] text-white px-4 py-2 my-5 rounded-2xl"
+                            onClick={() => setImageRequest(false)}
+                          >
+                            Chat to Leo
+                          </button>
                         </div>
-                        <button type="submit" className="bg-[#100547] text-white px-4 py-2 my-5 rounded-2xl"
-                         onClick={()=> setImageRequest(false)}>
-                        Chat to Leo
-                        </button>
-                      </div>
+                      ) : (
+                        <div>
+                          <div
+                            id="chat-history"
+                            className="h-96 overflow-y-auto mb-4 w-full"
+                          >
+                            {chatHistory.length === 0 &&
+                              defaultOptions.map((option, index) => (
+                                <div
+                                  key={index}
+                                  onClick={() => sendMessage(option.title)}
+                                  className="cursor-pointer p-4 mb-4 self-center rounded-3xl border border-gray-300 text-gray-500 text-sm hover:bg-white"
+                                  style={{ opacity: 0.7, width: "795px" }}
+                                >
+                                  <div className="text-xl font-bold">
+                                    {option.title}
+                                  </div>
+                                  <div className="text-xs">
+                                    {option.description}
+                                  </div>
+                                </div>
+                              ))}
+                            {chatHistory.map((message, index) => (
+                              <div
+                                key={index}
+                                className={`p-4 mb-2 self-center text-indigo-950 rounded-xl ${
+                                  message.type === "user"
+                                    ? "bg-transparent border border-gray-200 text-sm text-right"
+                                    : "bg-transparent border border-indigo-950 text-left text-indigo-950 py-4 my-6"
+                                }`}
+                                style={{ width: "795px" }}
+                              >
+                                {message.text}
+                              </div>
+                            ))}
+                          </div>
+                          <div className="bg-indigo-950 w-full rounded-xl">
+                            <div
+                              className="flex w-full items-center justify-center"
+                              onSubmit={(e) => {
+                                e.preventDefault();
+                                sendMessage();
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+                      )}
+                      {imageRequest ? (
+                        <div className="bg-indigo-950 w-full rounded-xl">
+                          <form
+                            className="flex w-full items-center justify-center"
+                            onSubmit={(e) => {
+                              e.preventDefault();
+                              analyzeImage();
+                            }}
+                          >
+                            <input
+                              type="text"
+                              value={userInput}
+                              onChange={(e) => setUserInput(e.target.value)}
+                              className="flex-1 mr-2 p-4 text-sm text-gray-200 rounded-2xl bg-indigo-950"
+                              placeholder="Write your question about the image"
+                            />
 
-                      )
-                      :(
-                        <div id="chat-history" className="h-96 overflow-y-auto mb-4 w-full">
-                      {chatHistory.length === 0 && defaultOptions.map((option, index) => (
-                        <div
-                          key={index}
-                          onClick={() => sendMessage(option.title)}
-                          className="cursor-pointer p-4 mb-4 self-center rounded-3xl border border-gray-300 text-gray-500 text-sm hover:bg-white"
-                          style={{ opacity: 0.7, width: '795px' }}
-                        >
-                          <div className="text-xl font-bold">{option.title}</div>
-                          <div className="text-xs">{option.description}</div>
+                            <button
+                              type="button"
+                              className={`mr-2 px-3 text-gray-300 bg-[#100547] rounded-full ${
+                                isMicrophoneActive
+                                  ? "bg-green-700 text-white"
+                                  : "bg-transparent"
+                              } rounded-full`}
+                              onClick={handleSpeechRecognition}
+                            >
+                              <i className="fa fa-microphone text-sm"></i>
+                            </button>
+
+                            <button
+                              type="submit"
+                              className="bg-[#100547] text-white px-4 py-2 rounded-2xl"
+                            >
+                              Ask
+                            </button>
+                          </form>
                         </div>
-                      ))}
->>>>>>> 6c91d1b33aedb4e6aa24cb200db9e493741f4eac
-                      {chatHistory.map((message, index) => (
-                        <div
-                          key={index}
-                          className={`p-4 mb-2 self-center text-indigo-950 rounded-xl ${
-                            message.type === "user"
-                              ? "bg-transparent border border-gray-200 text-sm text-right"
-                              : "bg-transparent border border-indigo-950 text-left text-indigo-950 py-4 my-6"
-                          }`}
-                          style={{ width: "795px" }}
-                        >
-                          {message.text}
+                      ) : (
+                        <div className="bg-indigo-950 w-full rounded-xl">
+                          <form
+                            className="flex w-full items-center justify-center"
+                            onSubmit={(e) => {
+                              e.preventDefault();
+                              sendMessage();
+                            }}
+                          >
+                            <input
+                              type="text"
+                              value={userInput}
+                              onChange={(e) => setUserInput(e.target.value)}
+                              className="flex-1 mr-2 p-4 text-sm text-gray-200 rounded-2xl bg-indigo-950"
+                              placeholder="Ask me anything"
+                            />
+                            <button
+                              type="button"
+                              className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full"
+                            >
+                              <i className="fa fa-file text-sm"></i>
+                            </button>
+                            <button
+                              type="button"
+                              className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full"
+                              onClick={() => setImageRequest(true)}
+                            >
+                              <i className="fa fa-image text-sm"></i>
+                            </button>
+                            <button
+                              type="button"
+                              className={`mr-2 px-3 text-gray-300 bg-[#100547] rounded-full ${
+                                isMicrophoneActive
+                                  ? "bg-green-700 text-white"
+                                  : "bg-transparent"
+                              } rounded-full`}
+                              onClick={handleSpeechRecognition}
+                            >
+                              <i className="fa fa-microphone text-sm"></i>
+                            </button>
+                            <button
+                              type="button"
+                              className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full"
+                              onClick={handleResume}
+                            >
+                              <i class="fa-regular fa-circle-play text-sm"></i>
+                            </button>
+                            <button
+                              type="button"
+                              className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full"
+                              onClick={handlePause}
+                            >
+                              <i className="fa-regular fa-circle-pause text-sm"></i>
+                            </button>
+
+                            <button
+                              className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full"
+                              type="button"
+                              onClick={handleStop}
+                            >
+                              <i class="fa-regular fa-circle-stop text-sm"></i>
+                            </button>
+                            <button
+                              type="button"
+                              className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full"
+                              onClick={handleDecreaseVolume}
+                            >
+                              <i className="fa fa-volume-down text-sm"></i>
+                            </button>
+                            <button
+                              type="button"
+                              className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full"
+                              onClick={handleIncreaseVolume}
+                            >
+                              <i className="fa fa-volume-up text-sm"></i>
+                            </button>
+                            <button
+                              type="submit"
+                              className="bg-[#100547] text-white px-4 py-2 rounded-2xl"
+                            >
+                              Send
+                            </button>
+                          </form>
                         </div>
-                      ))}
+                      )}
+                      {isLoading && (
+                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                          <img src={loader} width="150px" alt="Loading..." />
+                        </div>
+                      )}
                     </div>
-<<<<<<< HEAD
-                    <div className="bg-indigo-950 w-full rounded-xl">
-                      <form
-                        className="flex w-full items-center justify-center"
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          sendMessage();
-                        }}
-=======
-                      )
-                    }
-                    
-                     {
-                  
-                      imageRequest?(
-                        <div className='bg-indigo-950 w-full rounded-xl'>
-                        <form className="flex w-full items-center justify-center" onSubmit={(e) => { e.preventDefault(); analyzeImage(); }}>
-                      
-                      <input
-                        type="text"
-                        value={userInput}
-                        onChange={(e) => setUserInput(e.target.value)}
-                        className="flex-1 mr-2 p-4 text-sm text-gray-200 rounded-2xl bg-indigo-950"
-                        placeholder="Write your question about the image"
-                      />
-                      
-                      <button 
-                        type="button" 
-                        className={`mr-2 px-3 text-gray-300 bg-[#100547] rounded-full ${isMicrophoneActive ? 'bg-green-700 text-white' : 'bg-transparent'} rounded-full`}
-                        onClick={handleSpeechRecognition}
-                      >
-                        <i className="fa fa-microphone text-sm"></i>
-                      </button>
-                      
-                      <button type="submit" className="bg-[#100547] text-white px-4 py-2 rounded-2xl">
-                        Ask 
-                      </button>
-
-                     </form>
-                     </div>
-                      )
-                      :(
-                        <div className='bg-indigo-950 w-full rounded-xl'>
-                        <form className="flex w-full items-center justify-center" onSubmit={(e) => {
-                e.preventDefault();
-                
-              }}>
-                      
-                      <input
-                        type="text"
-                        value={userInput}
-                        onChange={(e) => setUserInput(e.target.value)}
-                        className="flex-1 mr-2 p-4 text-sm text-gray-200 rounded-2xl bg-indigo-950"
-                        placeholder="Ask me anything"
-                      />
-                      <button type="button" className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full">
-                        <i className="fa fa-file text-sm"></i>
-                      </button>
-                      <button type="button" className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full"
-                      onClick={()=> setImageRequest(true)}>
-                        <i className="fa fa-image text-sm"></i>
-                      </button>
-                      <button 
-                        type="button" 
-                        className={`mr-2 px-3 text-gray-300 bg-[#100547] rounded-full ${isMicrophoneActive ? 'bg-green-700 text-white' : 'bg-transparent'} rounded-full`}
-                        onClick={handleSpeechRecognition}
->>>>>>> 6c91d1b33aedb4e6aa24cb200db9e493741f4eac
-                      >
-                        <input
-                          type="text"
-                          value={userInput}
-                          onChange={(e) => setUserInput(e.target.value)}
-                          className="flex-1 mr-2 p-4 text-sm text-gray-200 rounded-2xl bg-indigo-950"
-                          placeholder="Ask me anything"
-                        />
-                        <button
-                          type="button"
-                          className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full"
-                        >
-                          <i className="fa fa-file text-sm"></i>
-                        </button>
-                        <button
-                          type="button"
-                          className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full"
-                        >
-                          <i className="fa fa-image text-sm"></i>
-                        </button>
-                        <button
-                          type="button"
-                          className={`mr-2 px-3 text-gray-300 bg-[#100547] rounded-full ${
-                            isMicrophoneActive
-                              ? "bg-green-700 text-white"
-                              : "bg-transparent"
-                          } rounded-full`}
-                          onClick={handleSpeechRecognition}
-                        >
-                          <i className="fa fa-microphone text-sm"></i>
-                        </button>
-                        <button
-                          type="button"
-                          className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full"
-                          onClick={handleResume}
-                        >
-                          <i class="fa-regular fa-circle-play text-sm"></i>
-                        </button>
-                        <button
-                          type="button"
-                          className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full"
-                          onClick={handlePause}
-                        >
-                          <i className="fa-regular fa-circle-pause text-sm"></i>
-                        </button>
-
-<<<<<<< HEAD
-                        <button
-                          className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full"
-                          type="button"
-                          onClick={handleStop}
-                        >
-                          <i class="fa-regular fa-circle-stop text-sm"></i>
-                        </button>
-                        <button
-                          type="button"
-                          className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full"
-                          onClick={handleDecreaseVolume}
-                        >
-                          <i className="fa fa-volume-down text-sm"></i>
-                        </button>
-                        <button
-                          type="button"
-                          className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full"
-                          onClick={handleIncreaseVolume}
-                        >
-                          <i className="fa fa-volume-up text-sm"></i>
-                        </button>
-                        <button
-                          type="submit"
-                          className="bg-[#100547] text-white px-4 py-2 rounded-2xl"
-                        >
-                          Send
-                        </button>
-                      </form>
-=======
-                      <button 
-                      className='mr-2 px-3 text-gray-300 bg-[#100547] rounded-full'
-                      type="button" 
-                      onClick={handleStop}
-                      >
-                      <i class="fa-regular fa-circle-stop text-sm"></i>
-                      </button>
-                      <button 
-                      type="button" 
-                      className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full" 
-                      onClick={handleDecreaseVolume}
-                      >
-                     <i className="fa fa-volume-down text-sm"></i>
-                     </button>
-                     <button 
-                     type="button" 
-                     className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full" 
-                     onClick={handleIncreaseVolume}
-                     >
-                     <i className="fa fa-volume-up text-sm"></i>
-                     </button>
-                      <button type="submit" className="bg-[#100547] text-white px-4 py-2 rounded-2xl">
-                        Send
-                      </button>
-
-                    </form>
->>>>>>> 6c91d1b33aedb4e6aa24cb200db9e493741f4eac
-                    </div>
-                      )
-                    }
-                    
-                    
-                    {isLoading && (
-                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <img src={loader} width="150px" alt="Loading..." />
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>
