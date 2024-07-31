@@ -133,6 +133,10 @@ app.post("/vision", async (req, res) => {
   try {
     const { message, imageUrl } = req.body;
 
+    if (!imageUrl) {
+      return res.status(400).json({ error: 'No image URL provided.' });
+    }
+
     // Download image from URL and convert it to base64
     const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
     const imageAsBase64 = Buffer.from(response.data, 'binary').toString('base64');
