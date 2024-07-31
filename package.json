@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@google-cloud/datastore": "^9.0.0"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "default": "leodatabase-80687",
+    "leodatabase-80687": "leodatabase-80687"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}
