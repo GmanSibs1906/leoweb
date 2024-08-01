@@ -3,7 +3,6 @@
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
-  "projectId": "leodatabase-80687",
   "functions": [
     {
       "source": "functions",
@@ -16,14 +15,5 @@
         "*.local"
       ]
     }
-  ],
-  "emulators": {
-    "firestore": {
-      "port": 3007,
-      "instance": "nam5" 
-    },
-    "pubsub": {
-      "port": 3008 
-    }
-  }
+  ]
 }

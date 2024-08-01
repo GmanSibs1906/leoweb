@@ -2,8 +2,8 @@ const { getFirestore, collection, getDocs, query, where } = require("firebase/fi
 const { db } = require("./firebaseConfig");
 
 async function fetchUserChatData(userId) {
-  const chatsRef = collection(db, "users", userId, "chats");  
-  const querySnapshot = await getDocs(chatsRef);
+  const q = query(collection(db, "chats"), where("uid", "==", userId));
+  const querySnapshot = await getDocs(q);
   let chatData = [];
   querySnapshot.forEach((doc) => {
     chatData.push(doc.data());
