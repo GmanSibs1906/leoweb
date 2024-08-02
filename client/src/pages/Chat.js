@@ -1,3 +1,5 @@
+/*
+
 import React, { useState, useEffect } from "react";
 import { loader, logo } from "../images";
 
@@ -54,7 +56,7 @@ function Chat() {
         },
       };
 
-      const response = await fetch("http://localhost:5000/vision", options);
+      const response = await fetch("https://leobackend-bxcm.onrender.com/vision", options);
       const data = await response.json();
       setImageResponse(data.message.content);
 
@@ -77,7 +79,7 @@ function Chat() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/chat", {
+      const response = await fetch("https://leobackend-bxcm.onrender.com/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -225,11 +227,12 @@ function Chat() {
   );
 }
 
-export default Chat;
+*/
 
 
 
-/*
+
+
 import React, { useState, useEffect, useRef } from "react";
 import { loader } from "../images";
 import Sidebar from "../components/Sidebar";
@@ -267,7 +270,7 @@ function Chat() {
         method: "POST",
         body: formData,
       };
-      const response = await fetch("http://localhost:5000/upload", options);
+      const response = await fetch("https://leobackend-bxcm.onrender.com/upload", options);
       const data = await response.json();
       setImageUrl(data.url); // Save the image URL
       console.log(data);
@@ -378,7 +381,7 @@ function Chat() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/chat", {
+      const response = await fetch("https://leobackend-bxcm.onrender.com/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -396,9 +399,10 @@ function Chat() {
       console.log(botMessage)
 
       setChatHistory((prevHistory) => [
+        ...prevHistory,
         { type: "user", text: userMessage },
         { type: "bot", text: botMessage },
-        ...prevHistory,
+        
       ]);
 
       // Call text-to-speech function
@@ -489,6 +493,51 @@ function Chat() {
               <div className="flex flex-wrap justify-center content-start items-center px-8 mt-8 mb-16 text-2xl leading-7 text-white max-md:px-4 max-md:my-8 max-md:max-w-full">
                 <div className="flex flex-col max-w-full w-full items-center">
                   <div className="flex flex-col justify-center rounded-xl max-md:max-w-full items-center">
+                  {imageRequest ? (
+                      <div className="bg-indigo-950 w-full rounded-xl p-4">
+                        <form
+                          className="flex flex-col"
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            analyzeImage();
+                          }}
+                        >
+                        <div className=" w-full flex justify-center my-[10px] cursor-pointer ">
+                            <div className="bg-[#100547] text-white px-4 py-1 rounded-md">
+                              <label htmlFor="files">Upload</label>
+                              <input
+                                type="file"
+                                onChange={uploadImage}
+                                id="files"
+                                accept="image/*"
+                                hidden
+                              />
+                            </div>
+                          </div>
+                          {image && (
+                            <div className="w-full my-4">
+                              <img src={imageUrl} alt="preview" className="w-full object-contain" />
+                            </div>
+                          )}
+                          <div className=" flex ">
+                            <input
+                              type="text"
+                              value={userInput}
+                              onChange={(e) => setUserInput(e.target.value)}
+                              className="flex-1 mr-2 p-2 border rounded-md text-indigo-950"
+                              placeholder="Enter your message"
+                            />
+                            <button
+                              type="submit"
+                              className="bg-[#100547] text-white px-4 py-2 rounded-md"
+                            >
+                              Ask Leo
+                            </button>
+                            </div>
+                        </form>
+                      </div>
+                  ) : (
+                    <div className="w-full rounded-xl p-4">
                     <div
                       id="chat-history"
                       className="h-96 overflow-y-auto mb-4 w-full"
@@ -521,7 +570,7 @@ function Chat() {
                         </div>
                       ))}
                     </div>
-                    <div className="bg-indigo-950 w-full rounded-xl">
+                    
                       <form
                         className="flex w-full items-center justify-center"
                         onSubmit={(e) => {
@@ -545,6 +594,7 @@ function Chat() {
                         <button
                           type="button"
                           className="mr-2 px-3 text-gray-300 bg-[#100547] rounded-full"
+                          onClick={() => setImageRequest(true)}
                         >
                           <i className="fa fa-image text-sm"></i>
                         </button>
@@ -603,6 +653,7 @@ function Chat() {
                         </button>
                       </form>
                     </div>
+                  )}
                     {isLoading && (
                       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                         <img src={loader} width="150px" alt="Loading..." />
@@ -620,4 +671,3 @@ function Chat() {
 }
 
 export default Chat;
-*/

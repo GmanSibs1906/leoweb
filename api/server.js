@@ -2,24 +2,25 @@ const express = require('express');
 const cors = require('cors');
 const OpenAI = require('openai');
 const path = require('path');
-const admin = require('firebase-admin');
+const { initializeApp, cert } = require('firebase-admin/app');
+const { getStorage } = require('firebase-admin/storage');
 const multer = require('multer');
+const admin = require('firebase-admin');
 const axios = require('axios');
-require('dotenv').config();
-
-const serviceAccount = require('./serviceAccountKey.json');
+const serviceAccount = require('./leodata.json');
+const app = express();
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   storageBucket: "leodatabase-80687.appspot.com"
 });
 
-const firestore = admin.firestore();
-const storage = admin.storage();
-const bucket = storage.bucket();
+require('dotenv').config();
 
-const app = express();
 const port = process.env.PORT || 5000;
+
+const storage = getStorage();
+const bucket = storage.bucket();
 
 app.use(cors());
 app.use(express.json());
@@ -58,21 +59,12 @@ async function runChat(sessionId, userInput) {
 
   const assistantMessage = response.choices[0].message;
   chatSession.push(assistantMessage);
-
-  // Save chat to Firestore
-  const userId = sessionId; // Assuming sessionId is the same as userId
-  await firestore.collection('users').doc(userId).collection('chats').add({
-    userInput: userInput,
-    botResponse: assistantMessage.content,
-    timestamp: admin.firestore.FieldValue.serverTimestamp(),
-  });
-
   return assistantMessage.content;
 }
 
 app.post('/api/chat', async (req, res) => {
-  const { sessionId, userInput, uid } = req.body;
-  console.log(`Received request: sessionId=${sessionId}, userInput=${userInput}, uid=${uid}`);
+  const { sessionId, userInput } = req.body;
+  console.log(`Received request: sessionId=${sessionId}, userInput=${userInput}`);
 
   try {
     const response = await runChat(sessionId, userInput);
@@ -113,13 +105,6 @@ app.post("/upload", upload, async (req, res) => {
       const url = `https://storage.googleapis.com/${bucket.name}/${fileRef.name}`;
       console.log(`Image uploaded to: ${url}`);
       res.json({ url });
-
-      // Save image URL to Firestore
-      const { uid } = req.body;
-      await firestore.collection('users').doc(uid).collection('uploads').add({
-        imageUrl: url,
-        timestamp: admin.firestore.FieldValue.serverTimestamp(),
-      });
     });
 
     stream.end(file.buffer);
