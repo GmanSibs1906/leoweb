@@ -2,6 +2,7 @@ const { initializeApp } = require("firebase/app");
 const { getAuth } = require("firebase/auth");
 const { getFirestore } = require("firebase/firestore");
 
+// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyD73h43t8viQo0TYait0n5Eimm2wEk38LY",
   authDomain: "leodatabase-80687.firebaseapp.com",
@@ -11,6 +12,7 @@ const firebaseConfig = {
   appId: "1:464417745012:web:f75c796f063a48abbe0921"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
