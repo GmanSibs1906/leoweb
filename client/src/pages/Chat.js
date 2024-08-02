@@ -423,7 +423,7 @@ function Chat() {
 
     const voices = window.speechSynthesis.getVoices();
     const selectedVoice = voices.find(
-      (voice) => voice.name === "Google UK English Male"
+      (voice) => voice.name === "Microsoft Mark - English"
     ); // Change the name to the desired voice
     if (selectedVoice) {
       speech.voice = selectedVoice;
