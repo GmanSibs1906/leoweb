@@ -280,6 +280,7 @@ function Chat() {
   };
 
   const analyzeImage = async () => {
+    console.log("sending request to Leo"); // comment me out
     setImageResponse("");
     if (!image) {
       setImageError("Please upload an image first!");
@@ -297,9 +298,13 @@ function Chat() {
         },
       };
 
-      const response = await fetch("http://localhost:5000/vision", options);
+      const response = await fetch("https://leobackend-bxcm.onrender.com/vision", options);
       const data = await response.json();
+      console.log("Leo is processing response: "); // comment me out
+      console.log("Please wait : loading... "); // comment me out
+      console.log(data);
       setImageResponse(data.message.content);
+      console.log("Leo says : " + data.message.content); // comment me out
 
       setChatHistory((prevHistory) => [
         { type: "image", imageUrl },
@@ -515,8 +520,8 @@ function Chat() {
                             </div>
                           </div>
                           {image && (
-                            <div className="w-full my-4">
-                              <img src={imageUrl} alt="preview" className="w-full object-contain" />
+                            <div className=" max-h-[70vh] w-full my-4">
+                              <img src={imageUrl} alt="preview" className=" max-h-[60vh] w-full object-contain" />
                             </div>
                           )}
                           <div className=" flex ">
