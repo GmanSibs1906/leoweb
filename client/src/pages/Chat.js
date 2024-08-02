@@ -520,8 +520,13 @@ function Chat() {
                             </div>
                           </div>
                           {image && (
-                            <div className=" max-h-[70vh] w-full my-4">
+                            <div className="self-center max-h-[50vh] w-40 my-4">
                               <img src={imageUrl} alt="preview" className=" max-h-[60vh] w-full object-contain" />
+                            </div>
+                          )}
+                          {imageResponse && (
+                            <div className="w-full my-4 text-white">
+                              {imageResponse}
                             </div>
                           )}
                           <div className=" flex ">
