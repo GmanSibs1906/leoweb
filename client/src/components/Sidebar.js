@@ -23,17 +23,14 @@ function Sidebar({ resetChat }) {
       <div className="flex flex-col grow px-4 pt-8 pb-4 w-full rounded-3xl border-r border-solid bg-indigo-950 border-r-white border-r-opacity-10 max-md:pr-5 max-md:mt-8 overflow-auto">
         <div className="flex flex-col cursor-pointer">
           <div className="flex flex-col pb-4 text-3xl font-semibold leading-6 text-neutral-50">
-            <div className="flex flex-col justify-center px-4 py-3 w-full rounded-xl bg-white bg-opacity-10">
-              <div className="flex gap-4">
-                <img
+            <div className="flex flex-col justify-center px-4 py-3 w-full rounded-xl bg-white bg-opacity-2">
+              <div className="flex justify-center">
+              <img
                   loading="lazy"
-                  srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/e1d54f81eb727e2a2f3a7831e0a8f60ca4fe3fee44cb34a40fa74a58980439b0?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/e1d54f81eb727e2a2f3a7831e0a8f60ca4fe3fee44cb34a40fa74a58980439b0?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/e1d54f81eb727e2a2f3a7831e0a8f60ca4fe3fee44cb34a40fa74a58980439b0?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/e1d54f81eb727e2a2f3a7831e0a8f60ca4fe3fee44cb34a40fa74a58980439b0?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/e1d54f81eb727e2a2f3a7831e0a8f60ca4fe3fee44cb34a40fa74a58980439b0?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/e1d54f81eb727e2a2f3a7831e0a8f60ca4fe3fee44cb34a40fa74a58980439b0?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/e1d54f81eb727e2a2f3a7831e0a8f60ca4fe3fee44cb34a40fa74a58980439b0?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/e1d54f81eb727e2a2f3a7831e0a8f60ca4fe3fee44cb34a40fa74a58980439b0?apiKey=b9e8a53434bd4901a8aa6b01f0bdd9a1&"
-                  className="shrink-0 aspect-[1.15] w-[46px]"
-                  alt=''
-                />
-                <div className="flex-1 justify-center my-auto text-ellipsis">
-                  LEO AI
-                </div>
+                  src="https://media.discordapp.net/attachments/1226859331098640446/1272501886473338931/leo-logo.webp?ex=66bb353b&is=66b9e3bb&hm=552fcc7972b10e18d4b78a0b71c97290ca3e25e42f2b31ca11460ad7b0f3aa64&=&format=webp&width=625&height=212"
+                  className="object-contain w-[50%] h-auto"
+                  alt="Leo Logo"
+              />
               </div>
             </div>
           </div>

@@ -67,7 +67,7 @@ function Chat() {
       const data = await response.json();
       console.log("Leo is processing response: "); // comment me out
       console.log("Please wait : loading... "); // comment me out
-      console.log(data);
+      console.log(data); //
       setImageResponse(data.message.content);
       console.log("Leo says : " + data.message.content); // comment me out
 
